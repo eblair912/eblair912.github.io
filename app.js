@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     startScanButton.addEventListener('click', () => {
         if (navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({ video: true })
+            navigator.mediaDevices.getUserMedia({ video: {facingMode: "environment"} })
                 .then(stream => {
                     videoElement.srcObject = stream;
                     startScanning(videoElement);
