@@ -49,7 +49,7 @@ function startScanning(videoElement, canvasElement, context) {
                     }
                 });
             });
-        }, 1000);
+        }, 100);
 
     Quagga.onDetected((data) => {
         alert(`Barcode detected: ${data.codeResult.code}`);
