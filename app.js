@@ -44,6 +44,10 @@ function startScanning(videoElement, canvasElement, context) {
                             'codabar_reader']
                 },
                 locate: true,
+                locator: {
+                    halfSample: true,
+                    patchSize: 'medium'
+                }
             }, (result) => {
                 if (result) {
                     alert(result.codeResult.code);
