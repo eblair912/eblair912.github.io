@@ -48,7 +48,7 @@ function startScanning(videoElement, canvasElement, context) {
                 locate: true,
                 locator: {
                     halfSample: true,
-                    patchSize: 'medium'
+                    patchSize: 'x-small'
                 }
             }, (result) => {
                 if (result) {
