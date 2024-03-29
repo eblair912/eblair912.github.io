@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const videoElement = document.getElementById('webcam');
+    const canvasElement = document.getElementById('canvas');
+    const context = canvasElement.getContext('2d');
     const startScanButton = document.getElementById('scanBarcode');
 
     startScanButton.addEventListener('click', () => {
@@ -52,6 +54,7 @@ function startScanning(videoElement, canvasElement, context) {
                 if (result) {
                     alert(result.codeResult.code);
                     Quagga.stop();
+                    stopWebcam(videoElement);
                 }
             });
         }, 100);
@@ -80,4 +83,15 @@ function enhanceImage(canvasElement, context) {
     }
 
     context.putImageData(imageData, 0, 0);
+}
+
+function stopWebcam(videoElement) {
+    const stream = videoElement.srcObject;
+    const tracks = stream.getTracks();
+
+    tracks.forEach(track => {
+        track.stop();
+    });
+
+    videoElement.srcObject = null;
 }
