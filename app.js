@@ -66,12 +66,12 @@ function enhanceImage(canvasElement, context) {
     let data = imageData.data;
 
     // Convert to grayscale
-    for (let i = 0; i < data.length; i += 4) {
-        let brightness = 0.34 * data[i] + 0.5 * data[i + 1] + 0.16 * data[i + 2];
-        data[i] = brightness; // Red
-        data[i + 1] = brightness; // Green
-        data[i + 2] = brightness; // Blue
-    }
+    // for (let i = 0; i < data.length; i += 4) {
+    //     let brightness = 0.34 * data[i] + 0.5 * data[i + 1] + 0.16 * data[i + 2];
+    //     data[i] = brightness; // Red
+    //     data[i + 1] = brightness; // Green
+    //     data[i + 2] = brightness; // Blue
+    // }
 
     // Apply simple contrast adjustment
     const contrast = 1.2; // Contrast adjustment factor; >1 increases, <1 decreases
