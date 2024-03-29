@@ -44,7 +44,7 @@ function startScanning(videoElement, canvasElement, context) {
                             'codabar_reader']
                 }
                 }, (result) => {
-                    if (result && result.codeResult && result.codeResult.code) {
+                    if (result) {
                         alert(result.codeResult.code);
                     }
                 });
