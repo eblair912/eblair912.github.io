@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const videoElement = document.getElementById('webcam');
-    const canvasElement = document.getElementById('canvas');
+    const canvasElement = document.createElement('canvas');
     const context = canvasElement.getContext('2d');
     const startScanButton = document.getElementById('scanBarcode');
 
