@@ -30,7 +30,7 @@ function startScanning(videoElement, canvasElement, context) {
 
             Quagga.decodeSingle({
                 src: canvasElement.toDataURL(),
-                numOfWorkers: 0,
+                numOfWorkers: self.navigator.hardwareConcurrency || 4,
                 inputStream: {
                     size: canvasElement.width
                 },
@@ -42,15 +42,16 @@ function startScanning(videoElement, canvasElement, context) {
                             'code_39_reader',
                             'code_39_vin_reader',
                             'codabar_reader']
+                },
+                locate: true,
+            }, (result) => {
+                if (result) {
+                    alert(result.codeResult.code);
+                    Quagga.stop();
                 }
-                }, (result) => {
-                    if (result) {
-                        alert(result.codeResult.code);
-                        Quagga.stop();
-                    }
-                });
             });
         }, 100);
+    });
 }
 
 function enhanceImage(canvasElement, context) {
