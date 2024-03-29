@@ -46,15 +46,11 @@ function startScanning(videoElement, canvasElement, context) {
                 }, (result) => {
                     if (result) {
                         alert(result.codeResult.code);
+                        Quagga.stop();
                     }
                 });
             });
         }, 100);
-
-    Quagga.onDetected((data) => {
-        alert(`Barcode detected: ${data.codeResult.code}`);
-        Quagga.stop();
-    });
 }
 
 function enhanceImage(canvasElement, context) {
