@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
             navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
                 .then(stream => {
                     videoElement.srcObject = stream;
-                    startScanning(videoElement);
+                    setTimeout(() => startScanning(videoElement, canvasElement, context), 1000);
                 })
                 .catch(err => {
                     alert(`Something went wrong: ${err}`);
@@ -19,27 +19,64 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-function startScanning(videoElement) {
-    Quagga.init({
-        inputStream: {
-            name: "Live",
-            type: "LiveStream",
-            target: videoElement
-        },
-        decoder: {
-            readers: ["ean_reader"]
-        }
-    }, function (err) {
-        if (err) {
-            console.log(err);
-            return
-        }
-        console.log("Initialization finished. Ready to start");
-        Quagga.start();
-    });
+function startScanning(videoElement, canvasElement, context) {
+    videoElement.addEventListener('play', () => {
+        canvasElement.width = videoElement.videoWidth;
+        canvasElement.height = videoElement.videoHeight;
+
+        setInterval(() => {
+            context.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+            enhanceImage(canvasElement, context);
+
+            Quagga.decodeSingle({
+                src: canvasElement.toDataURL(),
+                numOfWorkers: 0,
+                inputStream: {
+                    size: canvasElement.width
+                },
+                decoder: {
+                    readers: ['ean_reader',
+                            'ean_8_reader',
+                            'upc_reader',
+                            'code_128_reader',
+                            'code_39_reader',
+                            'code_39_vin_reader',
+                            'codabar_reader']
+                }
+                }, (result) => {
+                    if (result && result.codeResult && result.codeResult.code) {
+                        alert(result.codeResult.code);
+                    }
+                });
+            });
+        }, 1000);
 
     Quagga.onDetected((data) => {
         alert(`Barcode detected: ${data.codeResult.code}`);
         Quagga.stop();
     });
+}
+
+function enhanceImage(canvasElement, context) {
+    let imageData = context.getImageData(0, 0, canvasElement.width, canvasElement.height);
+    let data = imageData.data;
+
+    // Convert to grayscale
+    for (let i = 0; i < data.length; i += 4) {
+        let brightness = 0.34 * data[i] + 0.5 * data[i + 1] + 0.16 * data[i + 2];
+        data[i] = brightness; // Red
+        data[i + 1] = brightness; // Green
+        data[i + 2] = brightness; // Blue
+    }
+
+    // Apply simple contrast adjustment
+    const contrast = 1.2; // Contrast adjustment factor; >1 increases, <1 decreases
+    const intercept = 128 * (1 - contrast);
+    for (let i = 0; i < data.length; i += 4) {
+        data[i] = data[i] * contrast + intercept; // Red
+        data[i + 1] = data[i + 1] * contrast + intercept; // Green
+        data[i + 2] = data[i + 2] * contrast + intercept; // Blue
+    }
+
+    context.putImageData(imageData, 0, 0);
 }
