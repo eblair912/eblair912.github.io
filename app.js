@@ -43,13 +43,7 @@ function startScanning(videoElement, canvasElement, context) {
                     size: canvasElement.width
                 },
                 decoder: {
-                    readers: ['ean_reader',
-                            'ean_8_reader',
-                            'upc_reader',
-                            'code_128_reader',
-                            'code_39_reader',
-                            'code_39_vin_reader',
-                            'codabar_reader']
+                    readers: ['ean_reader']
                 },
                 locate: true,
                 locator: {
