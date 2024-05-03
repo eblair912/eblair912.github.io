@@ -23,8 +23,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function startScanning(videoElement, canvasElement, context) {
     videoElement.addEventListener('play', () => {
+
+    if (videoElement.videoWidth > 0 && videoElement.videoHeight > 0) {
         canvasElement.width = videoElement.videoWidth;
         canvasElement.height = videoElement.videoHeight;
+    } else {
+        console.log('Video dimensions not available');
+        return;
+    }
 
         setInterval(() => {
             context.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
