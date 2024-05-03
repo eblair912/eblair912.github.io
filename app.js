@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const context = canvasElement.getContext('2d');
     const startScanButton = document.getElementById('scanBarcode');
 
+
     startScanButton.addEventListener('click', () => {
         if (navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
@@ -34,11 +35,10 @@ function startScanning(videoElement, canvasElement, context) {
 
         setInterval(() => {
             context.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
-            enhanceImage(canvasElement, context);
+            // enhanceImage(canvasElement, context);
 
             Quagga.decodeSingle({
                 src: canvasElement.toDataURL(),
-                numOfWorkers: self.navigator.hardwareConcurrency || 4,
                 inputStream: {
                     size: canvasElement.width
                 },
