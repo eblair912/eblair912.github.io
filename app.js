@@ -58,6 +58,8 @@ function startScanning(videoElement, canvasElement, context) {
                 }
             });
         }, 100);
+
+        alert('Scanning started');
     });
 }
 
