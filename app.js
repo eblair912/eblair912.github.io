@@ -34,8 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function startScanning(videoElement, canvasElement, context) {
-    videoElement.addEventListener('play', () => {
-
     if (videoElement.videoWidth > 0 && videoElement.videoHeight > 0) {
         canvasElement.width = videoElement.videoWidth;
         canvasElement.height = videoElement.videoHeight;
@@ -71,7 +69,6 @@ function startScanning(videoElement, canvasElement, context) {
         }, 100);
 
         alert('Scanning started');
-    });
 }
 
 function enhanceImage(canvasElement, context) {
