@@ -6,13 +6,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     context.willReadFrequently = true;
 
+    videoElement.addEventListener('play', () => {
+        if(videoElement.videoWidth > 0 && videoElement.videoHeight > 0) {
+            canvasElement.width = videoElement.videoWidth;
+            canvasElement.height = videoElement.videoHeight;
+            startScanning(videoElement, canvasElement, context);    
+        } else {
+            console.log('Video dimensions not available');
+        }
+    })
+
     startScanButton.addEventListener('click', () => {
         if (navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
                 .then(stream => {
                     videoElement.srcObject = stream;
                     videoElement.play();
-                    setTimeout(() => startScanning(videoElement, canvasElement, context), 1000);
                 })
                 .catch(err => {
                     alert(`Something went wrong: ${err}`);
