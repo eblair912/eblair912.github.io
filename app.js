@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
             navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
                 .then(stream => {
                     videoElement.srcObject = stream;
+                    videoElement.play();
                     setTimeout(() => startScanning(videoElement, canvasElement, context), 1000);
                 })
                 .catch(err => {
