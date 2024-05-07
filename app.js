@@ -1,10 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const cameraSelect = documnet.getElementById('cameraSelect');
+
     const videoElement = document.getElementById('webcam');
     const canvasElement = document.createElement('canvas');
     const context = canvasElement.getContext('2d');
     const startScanButton = document.getElementById('scanBarcode');
 
     context.willReadFrequently = true;
+
+    navigator.mediaDevices.enumerateDevices()
+        .then(devices => {
+            const videoDevices = devices.filter(device => device.kind === 'videoinput');
+
+            videoDevices.forEach((device, i) => {
+                const option = document.createElement('option');
+                option.value = device.deviceId;
+                option.text = device.label || `Camera ${i + 1}`;
+                cameraSelect.appendChild(option);
+            });
+        })
+        .catch(err => {
+            console.error(err);
+        });
 
     videoElement.addEventListener('play', () => {
         if(videoElement.videoWidth > 0 && videoElement.videoHeight > 0) {
@@ -14,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             console.log('Video dimensions not available');
         }
-    })
+    });
 
     startScanButton.addEventListener('click', () => {
         if (navigator.mediaDevices.getUserMedia) {
@@ -31,6 +48,10 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('getUserMedia not supported');
         }
     });
+});
+
+cameraSelect.addEventListener('change', () => {
+    updateCameraStream(cameraSelect.value);
 });
 
 function startScanning(videoElement, canvasElement, context) {
@@ -104,4 +125,23 @@ function stopWebcam(videoElement) {
     });
 
     videoElement.srcObject = null;
+}
+
+function updateCameraStream(deviceId) {
+    const videoElement = document.getElementById('webcam');
+    const constraints = {
+        video: { deviceId: { exact: deviceId } }
+    };
+
+    if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then(stream => {
+                videoElement.srcObject = stream;
+            })
+            .catch(err => {
+                console.error('Error accessing the webcam.', err);
+            });
+    } else {
+        alert('getUserMedia not supported');
+    }
 }
