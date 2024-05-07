@@ -3,7 +3,7 @@ function onScanSuccess(decodedText, decodedResult) {
 }
 
 function onScanFailure(error) {
-    alert(`Scan error: ${error}`);
+    console.log(`Scan error: ${error}`);
 }
 
 let html5QrcodeScanner = new Html5QrcodeScanner(
