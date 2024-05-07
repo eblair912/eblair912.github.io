@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const cameraSelect = documnet.getElementById('cameraSelect');
+    const cameraSelect = document.getElementById('cameraSelect');
 
     const videoElement = document.getElementById('webcam');
     const canvasElement = document.createElement('canvas');
