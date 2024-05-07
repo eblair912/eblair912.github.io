@@ -53,31 +53,27 @@ document.addEventListener('DOMContentLoaded', () => {
         updateCameraStream(cameraSelect.value);
     });
 
-    
-const accessButton = document.createElement('button');
-accessButton.textContent = 'Access Cameras';
-document.body.appendChild(accessButton);
 
-accessButton.addEventListener('click', () => {
-    navigator.mediaDevices.getUserMedia({ video: true })
-        .then(() => navigator.mediaDevices.enumerateDevices())
-        .then(devices => {
-            const videoDevices = devices.filter(device => device.kind === 'videoinput');
-            cameraSelect.innerHTML = '';  // Clear existing options
+    accessButton.addEventListener('click', () => {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(() => navigator.mediaDevices.enumerateDevices())
+            .then(devices => {
+                const videoDevices = devices.filter(device => device.kind === 'videoinput');
+                cameraSelect.innerHTML = '';  // Clear existing options
 
-            videoDevices.forEach((device, index) => {
-                const option = document.createElement('option');
-                option.value = device.deviceId;
-                option.text = device.label || `Camera ${index + 1}`;
-                cameraSelect.appendChild(option);
+                videoDevices.forEach((device, index) => {
+                    const option = document.createElement('option');
+                    option.value = device.deviceId;
+                    option.text = device.label || `Camera ${index + 1}`;
+                    cameraSelect.appendChild(option);
+                });
+
+                document.body.removeChild(accessButton);  // Remove the access button after use
+            })
+            .catch(error => {
+                console.error('Error initializing cameras.', error);
             });
-
-            document.body.removeChild(accessButton);  // Remove the access button after use
-        })
-        .catch(error => {
-            console.error('Error initializing cameras.', error);
-        });
-});
+    });
 
     
 });
