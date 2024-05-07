@@ -48,11 +48,40 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('getUserMedia not supported');
         }
     });
+
+    cameraSelect.addEventListener('change', () => {
+        updateCameraStream(cameraSelect.value);
+    });
+
+    
+const accessButton = document.createElement('button');
+accessButton.textContent = 'Access Cameras';
+document.body.appendChild(accessButton);
+
+accessButton.addEventListener('click', () => {
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(() => navigator.mediaDevices.enumerateDevices())
+        .then(devices => {
+            const videoDevices = devices.filter(device => device.kind === 'videoinput');
+            cameraSelect.innerHTML = '';  // Clear existing options
+
+            videoDevices.forEach((device, index) => {
+                const option = document.createElement('option');
+                option.value = device.deviceId;
+                option.text = device.label || `Camera ${index + 1}`;
+                cameraSelect.appendChild(option);
+            });
+
+            document.body.removeChild(accessButton);  // Remove the access button after use
+        })
+        .catch(error => {
+            console.error('Error initializing cameras.', error);
+        });
 });
 
-cameraSelect.addEventListener('change', () => {
-    updateCameraStream(cameraSelect.value);
+    
 });
+
 
 function startScanning(videoElement, canvasElement, context) {
     if (videoElement.videoWidth > 0 && videoElement.videoHeight > 0) {
